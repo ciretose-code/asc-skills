@@ -49,7 +49,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from asc_client import (ASC, APP_PLATFORMS, LOCALES, PLATFORMS, TOOLKIT,  # noqa: E402
+from asc_client import (ASC, APP_PLATFORMS, EDITABLE, LOCALES, PLATFORMS, TOOLKIT,  # noqa: E402
                         project_path)
 
 LISTING_DIR = project_path("listing")
@@ -197,12 +197,27 @@ def push_locale(api: ASC, app: str, info: dict, version: dict, locale: str, args
         print(f"wrote {path}\n  fields: {', '.join(got)}\n")
         return 0
 
+    # A version already on sale accepts only promotional text; everything else
+    # waits for the next version. Say so instead of sending a doomed PATCH.
+    live_version = version["attributes"].get("appStoreState") not in EDITABLE
+    live_info = info["attributes"].get("appStoreState") not in EDITABLE
+    if live_version:
+        print(f"(version {version['attributes'].get('versionString')} is live: only "
+              "promotionalText can change; other differences wait for the next version)")
     print("app-level (name, subtitle, privacy policy):")
     info_changed = report("appInfo", wanted, (info_loc or {}).get("attributes", {}),
                           APP_INFO_FIELDS)
     print("version-level (description, keywords, promo, what's new, URLs):")
     ver_changed = report("version", wanted, (ver_loc or {}).get("attributes", {}),
                          VERSION_FIELDS)
+    if live_info and info_changed:
+        print(f"  (held: {', '.join(info_changed)} — app info is not editable)")
+        info_changed = []
+    if live_version:
+        held = [k for k in ver_changed if k != "promotionalText"]
+        if held:
+            print(f"  (held: {', '.join(held)} — need an editable version)")
+        ver_changed = [k for k in ver_changed if k == "promotionalText"]
     if info_loc is None:
         print(f"  CREATE  {locale} app-info localization")
         if "name" not in wanted:

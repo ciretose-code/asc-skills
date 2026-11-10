@@ -35,6 +35,7 @@ scripts live in this plugin, at `<this skill's base directory>/../../toolkit`
    `devices` (`iphone`, `ipad`, `watch` — drives required screenshot sets),
    `locales` (first = primary), `storekit`, `xcodeproj`. Delete unused keys.
    Read the real values from the Xcode project; don't guess the bundle id.
+   Watch apps / extensions with their own App ID go in `extraBundleIds`.
 4. **gitignore:** `.env`, `.env.*`, `!.env.example`, `*.p8`,
    `image_upload_failures.json`. `asc.json` is committed — it holds no secrets.
 5. **Seed the copy from the live store** (existing apps): `python3 $T/listing.py --pull`.

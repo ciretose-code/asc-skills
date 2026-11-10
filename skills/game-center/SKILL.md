@@ -17,11 +17,13 @@ Requires asc:setup.
 
 ```json
 [{"id": "myapp.first.win", "referenceName": "First Win", "title": "First Win",
-  "points": 10, "showBeforeEarned": true, "repeatable": false,
-  "preEarnedDescription": "Win your first game.",
-  "earnedDescription": "You won your first game.",
-  "localizations": {"ja": {"title": "…", "preEarnedDescription": "…", "earnedDescription": "…"}}}]
+  "description": "Win your first game.", "points": 10, "hidden": false,
+  "sortOrder": 100, "icon": "trophy.fill",
+  "localizations": {"ja": {"title": "…", "description": "…"}}}]
 ```
+
+`hidden: true` hides it until earned; one `description` is used before and after
+earning. `icon` is free-form input for your icon generator (e.g. an SF Symbol).
 
 - `achievementIcons` (default `marketing/game-center/icons/`): `<id>.png`,
   **512×512**, no alpha. Generate them from code (e.g. a Swift script drawing an
@@ -29,8 +31,8 @@ Requires asc:setup.
   they re-render identically.
 
 `id` becomes the vendor identifier and **can never change or be reused** once
-created. Total points across all achievements are capped at 1000, at most 100
-per achievement.
+created. Apple's guidance is ≤100 points per achievement and ~1000 in total;
+the total is a convention the API does not enforce.
 
 ## Workflow
 
@@ -50,5 +52,4 @@ web UI, and record their ids in the repo alongside the code that submits scores.
 | Mistake | Fix |
 |---|---|
 | Renaming an `id` to fix a typo | Creates a second achievement; change `referenceName`/`title` instead |
-| Exceeding 1000 points total | Rebalance before syncing |
 | Icon with alpha / wrong size | 512×512 RGB (`images.py check`) |

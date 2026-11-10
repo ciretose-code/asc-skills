@@ -74,7 +74,7 @@ Flags: `--locale de-DE` (repeatable), `--all-locales`, `--platform MAC_OS`,
 
 | Mistake | Fix |
 |---|---|
-| Editing the live (READY_FOR_SALE) version | Version-level fields need an editable version — create one (asc:release) |
+| Editing the live (READY_FOR_SALE) version | Only promo text changes on a live version; `listing.py` reports the rest as "held" — create the next version (asc:release) |
 | What's New on version 1.0 | App Store Connect rejects it; leave it out of the file |
 | Appending to last release's What's New | Replace it |
 | Opaque 409 on push | Usually an overlong field or a forbidden character; the dry run checks limits |

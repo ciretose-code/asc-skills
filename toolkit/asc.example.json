@@ -1,8 +1,18 @@
 {
   "bundleId": "com.example.myapp",
-  "platforms": ["IOS"],
-  "devices": ["iphone", "ipad"],
-  "locales": ["en-US"],
+  "extraBundleIds": [
+    "com.example.myapp.watchkitapp"
+  ],
+  "platforms": [
+    "IOS"
+  ],
+  "devices": [
+    "iphone",
+    "ipad"
+  ],
+  "locales": [
+    "en-US"
+  ],
   "storekit": "MyApp.storekit",
   "xcodeproj": "MyApp.xcodeproj",
   "productPrefix": "com.example.myapp.",

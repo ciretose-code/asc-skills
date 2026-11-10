@@ -11,7 +11,8 @@ capability builds fine, then the app quietly falls back to a local-only store.
 
 Expected capabilities can be listed in asc.json as
 `"capabilities": {"ICLOUD": "CloudKit sync", "GAME_CENTER": "leaderboards"}`;
-any that are absent are called out.
+any that are absent are called out. Extensions and watch apps with their own App
+ID go in `"extraBundleIds": [...]` and are reported too.
 
 An absent row is a prompt to look, not proof of a problem: not every capability
 appears as an explicit `bundleIdCapabilities` row. This script reports what the
@@ -61,7 +62,8 @@ def report(api: ASC, identifier: str) -> tuple[str, set[str]]:
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--bundle-id", help="App ID to check (default: asc.json bundleId)")
+    parser.add_argument("--bundle-id", action="append",
+                        help="App ID to check (repeatable; default: asc.json bundleId + extraBundleIds)")
     parser.add_argument("--enable", metavar="CAPABILITY", action="append", default=[],
                         help="capability type to add, e.g. ICLOUD (repeatable)")
     parser.add_argument("--apply", action="store_true",
@@ -69,7 +71,11 @@ def main() -> None:
     args = parser.parse_args()
 
     api = ASC()
-    ref, present = report(api, require_bundle_id(args.bundle_id))
+    targets = args.bundle_id or [require_bundle_id(None), *CONFIG.get("extraBundleIds", [])]
+    if args.enable and len(targets) > 1:
+        sys.exit("--enable needs exactly one --bundle-id")
+    for target in targets:
+        ref, present = report(api, target)
 
     if not args.enable:
         return
