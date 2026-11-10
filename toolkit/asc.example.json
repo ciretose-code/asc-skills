@@ -1,0 +1,21 @@
+{
+  "bundleId": "com.example.myapp",
+  "platforms": ["IOS"],
+  "devices": ["iphone", "ipad"],
+  "locales": ["en-US"],
+  "storekit": "MyApp.storekit",
+  "xcodeproj": "MyApp.xcodeproj",
+  "productPrefix": "com.example.myapp.",
+  "capabilities": {
+    "IN_APP_PURCHASE": "paid packs",
+    "GAME_CENTER": "leaderboards + achievements"
+  },
+  "paths": {
+    "listing": "marketing/listing",
+    "screenshots": "marketing/screenshots/upload",
+    "iapReview": "marketing/iap-review",
+    "review": "marketing/review",
+    "achievements": "marketing/game-center/achievements.json",
+    "achievementIcons": "marketing/game-center/icons"
+  }
+}

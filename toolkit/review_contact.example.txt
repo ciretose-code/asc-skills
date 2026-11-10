@@ -1,0 +1,5 @@
+# App Review contact — keep at ~/.config/asc/review_contact.txt (not in a repo).
+firstName: Ada
+lastName: Lovelace
+phone: +1 555 0100
+email: review@example.com

@@ -1,0 +1,11 @@
+{
+  "name": "asc-skills",
+  "owner": { "name": "ciretose" },
+  "plugins": [
+    {
+      "name": "asc",
+      "source": "./",
+      "description": "App Store Connect publishing skills backed by a shared, dry-run-by-default API toolkit."
+    }
+  ]
+}
