@@ -19,7 +19,8 @@ scripts live in this plugin, at `<this skill's base directory>/../../toolkit`
   store, and some things (Family Sharing on, a submission) cannot be undone.
 - Run from anywhere inside the project; the scripts walk up to `asc.json`
   (or honour `$ASC_CONFIG`).
-- `python3 $T/<script>.py --help` documents every flag.
+- **`--help` is the interface.** Run it before inventing flags:
+  `python3 $T/<script>.py --help` or `zsh $T/<script>.sh --help`.
 - If `python3` fails with an SSL/`_ssl` import error (a broken pyenv/Homebrew
   OpenSSL), use `/usr/bin/python3`.
 

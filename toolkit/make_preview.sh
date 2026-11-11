@@ -1,30 +1,48 @@
 #!/bin/zsh
 # Encode a device screen recording into an App Store App Preview.
-#
-#   make_preview.sh <input.mov> [out.mp4] [start-seconds] [duration-seconds]
-#
-# Env overrides:
-#   CANVAS=886x1920    iPhone (all modern sizes, portrait). iPad: 1200x1600.
-#                      Mac / Apple TV: 1920x1080. Landscape iPhone: 1920x886.
-#   PAD_COLOR=0xFFFFFF padding colour — use the app's background so bars vanish.
-#
-# Apple's App Preview spec (developer.apple.com/help/app-store-connect/reference/
-# app-preview-specifications) — every value below is pinned to it:
-#
-#   canvas     886 x 1920 for ALL modern iPhone sizes (6.1"-6.9"). This is not a
-#              native screen size, so device footage always needs scaling.
-#   duration   15-30s
-#   video      H.264, High Profile Level 4.0, progressive, <=30 fps, 10-12 Mbps
-#   audio      stereo, 256 kbps AAC, 44.1 or 48 kHz, all tracks enabled
-#   size       <=500 MB
-#
-# The source is scaled to fit and padded rather than stretched: a device is
-# ~0.4612-0.4622 wide-to-tall against the canvas's 0.4615, so a direct scale
-# would distort by a fraction of a percent. Padding keeps geometry exact and the
-# bars are sub-pixel in practice.
 set -eu
 
-IN="${1:?usage: make_preview.sh <input.mov> [out.mp4] [start] [duration]}"
+usage() {
+  cat <<'EOF'
+Usage: make_preview.sh <input.mov> [out.mp4] [start-seconds] [duration-seconds]
+
+Encode a device screen recording into an App Store App Preview. Scales to fit
+and pads rather than stretching, then prints PASS/FAIL for every Apple spec
+item plus the peak audio level (silence means re-record, not re-encode).
+
+Arguments:
+  input.mov          Source recording (iOS Screen Recording recommended)
+  out.mp4            Output path (default: <input>-preview.mp4)
+  start-seconds      Trim start (default: 0)
+  duration-seconds   Clip length (default: 28; Apple allows 15-30)
+
+Environment:
+  CANVAS=886x1920    iPhone portrait (all modern sizes). iPad: 1200x1600.
+                     Mac / Apple TV: 1920x1080. Landscape iPhone: 1920x886.
+  PAD_COLOR=0xFFFFFF Padding colour — use the app's background so bars vanish.
+
+Apple's App Preview spec (pinned):
+  canvas     886x1920 for all modern iPhone sizes (not a native screen size)
+  duration   15-30s
+  video      H.264 High Profile Level 4.0, progressive, <=30 fps, 10-12 Mbps
+  audio      stereo AAC 256 kbps, 44.1 or 48 kHz (silent stereo track added if
+             the source has none)
+  size       <=500 MB
+
+Requires: ffmpeg (brew install ffmpeg)
+
+Examples:
+  make_preview.sh take.mov out.mp4 2 28
+  CANVAS=1200x1600 PAD_COLOR=0xE8E6DC make_preview.sh take.mov ipad.mp4
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+IN="${1:?usage: make_preview.sh <input.mov> [out.mp4] [start] [duration]  (try --help)}"
 OUT="${2:-${IN:r}-preview.mp4}"
 START="${3:-0}"
 DUR="${4:-28}"

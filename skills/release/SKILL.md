@@ -8,7 +8,8 @@ description: Use when shipping an app update or first release to the App Store â
 ## Overview
 
 `status.py` is the read-only checklist; `version.py` does the steps. Run status
-first and last. `$T` = `<this skill's base directory>/../../toolkit`. Requires asc:setup.
+first and last. `$T` = `<this skill's base directory>/../../toolkit`. Requires
+asc:setup. Flags for either: `python3 $T/<script>.py --help`.
 
 ## Workflow
 

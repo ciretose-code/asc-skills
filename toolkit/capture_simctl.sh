@@ -1,30 +1,51 @@
 #!/bin/zsh
 # Capture App Store screenshots on a simulator by relaunching the app into each
 # screen with launch arguments — no UI automation needed.
-#
-#   capture_simctl.sh <device-name-or-udid> <out-dir> <shots-file> [app-path]
-#
-# Env:
-#   BUNDLE_ID     default: "bundleId" from the nearest asc.json
-#   SETUP_HOOK    script run once after install + first launch, with
-#                 $UDID $BUNDLE_ID $CONTAINER exported — inject saved state,
-#                 defaults, fixtures here (see the screenshots skill)
-#   APPEARANCE    light | dark (default: light)
-#
-# <shots-file>: one shot per line —   <name> <settle-seconds> [launch args...]
-#   # comments and blank lines are ignored
-#   01-hero      6  -screenshotMode -screen home
-#   02-detail    7  -screenshotMode -screen detail -item sample
-#   03-dark      6  -screenshotMode -screen home -AppleInterfaceStyle Dark
-#   @hook prepare_run.sh       (a line starting @hook runs that script with the
-#                               same env, between shots — e.g. swap saved state)
-#
-# Each shot: terminate, relaunch with its args, wait <settle>, screenshot. The
-# status bar is pinned to 9:41 / full battery / full bars. Output is the
-# simulator's native size, RGBA PNG: run `images.py flatten` before uploading.
 set -eu
 
-DEV="${1:?usage: capture_simctl.sh <device> <out-dir> <shots-file> [app-path]}"
+usage() {
+  cat <<'EOF'
+Usage: capture_simctl.sh <device-name-or-udid> <out-dir> <shots-file> [app-path]
+
+Capture App Store screenshots on a simulator by relaunching the app into each
+screen with launch arguments — no UI automation needed.
+
+Each shot: terminate, relaunch with its args, wait <settle>, screenshot. The
+status bar is pinned to 9:41 / full battery / full bars. Output is the
+simulator's native size, RGBA PNG: run `images.py flatten` before uploading.
+
+Arguments:
+  device       Simulator name ("iPhone 17 Pro Max") or UDID
+  out-dir      Directory for <name>.png files
+  shots-file   One shot per line (see format below)
+  app-path     Optional path to a built .app (default: newest Debug build)
+
+Environment:
+  BUNDLE_ID    default: "bundleId" from the nearest asc.json
+  SETUP_HOOK   script run once after install + first launch, with
+               $UDID $BUNDLE_ID $CONTAINER exported
+  APPEARANCE   light | dark (default: light)
+
+shots-file format — one shot per line:
+  <name> <settle-seconds> [launch args...]
+  # comments and blank lines are ignored
+  01-hero      6  -screenshotMode -screen home
+  02-detail    7  -screenshotMode -screen detail -item sample
+  03-dark      6  -screenshotMode -screen home -AppleInterfaceStyle Dark
+  @hook prepare_run.sh   # runs that script between shots (same env)
+
+Examples:
+  capture_simctl.sh "iPhone 17 Pro Max" out/iphone shots.txt
+  APPEARANCE=dark capture_simctl.sh "$UDID" out/dark shots.txt ./MyApp.app
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+DEV="${1:?usage: capture_simctl.sh <device> <out-dir> <shots-file> [app-path]  (try --help)}"
 OUT="${2:?out dir}"
 SHOTS="${3:?shots file}"
 APP="${4:-}"
