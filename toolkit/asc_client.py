@@ -14,7 +14,8 @@ Credentials are looked up in this order, first hit wins per value:
   3. `~/.config/asc/.env` — the recommended home, because one key with the
      **App Manager** role works for every app on the team
 
-`ASC_KEY_PATH` may be a path to the `.p8` or the PEM pasted inline.
+`ASC_KEY_PATH` may be a path to the `.p8` (recommended: `~/.config/asc/`, mode
+600) or the PEM pasted inline.
 """
 from __future__ import annotations
 
