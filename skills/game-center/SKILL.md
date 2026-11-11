@@ -39,8 +39,9 @@ the total is a convention the API does not enforce.
 1. `python3 $T/bundle_capabilities.py` — `GAME_CENTER` should be on.
 2. Edit `achievements.json` / icons.
 3. `python3 $T/game_center_achievements.py` (dry run) → show the user →
-   `--apply`. Flags: `--skip-images`, `--only-failed-images` (retries icons
-   logged in `image_upload_failures.json`, which should be gitignored).
+   `--apply`. See `--help` for flags (`--skip-images`, `--only-failed-images`
+   retries icons logged in `image_upload_failures.json`, which should be
+   gitignored).
 4. Re-run the dry run: expect `unchanged` for every achievement.
 5. New achievements go live with the next app version submission (asc:release).
 

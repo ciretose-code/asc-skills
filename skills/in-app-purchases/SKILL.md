@@ -26,6 +26,7 @@ Missing any → **Missing Metadata**. `suffix` = product id minus `<bundleId>.`.
 ## Workflow
 
 ```sh
+python3 $T/iap_setup.py --help          # flags for every IAP/subscription script
 python3 $T/iap_setup.py                 # dry run: CREATE / UPDATE / ok / !! per product
 python3 $T/iap_setup.py --apply
 python3 $T/iap_setup.py --skip-price    # copy + notes only

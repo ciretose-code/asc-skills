@@ -51,9 +51,9 @@ Only keys present are pushed. Per-platform differences go in
 4. **Apply** after a yes: `python3 $T/listing.py --apply`. Re-run the dry run: it
    should show all `ok`.
 
-Flags: `--locale de-DE` (repeatable), `--all-locales`, `--platform MAC_OS`,
-`--version 1.3`. A locale with a file but no App Store Connect localization is
-**created** on `--apply` (needs at least `name:`).
+Flags: `python3 $T/listing.py --help` (common: `--locale`, `--all-locales`,
+`--platform`, `--version`). A locale with a file but no App Store Connect
+localization is **created** on `--apply` (needs at least `name:`).
 
 ## Writing What's New
 

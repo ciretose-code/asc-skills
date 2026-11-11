@@ -34,6 +34,8 @@ In each project, run `/asc:setup`.
 
 All scripts are **dry run by default** (`--apply` writes), read current state
 first and are safe to re-run. Run them from anywhere inside a project.
+Every command documents its flags via `--help`
+(`python3 toolkit/<script>.py --help` or `zsh toolkit/<script>.sh --help`).
 
 | Script | Does |
 |---|---|

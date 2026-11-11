@@ -25,7 +25,7 @@ Toolkit: `$T` = `<this skill's base directory>/../../toolkit`. Requires asc:setu
 
 | Option | Best for |
 |---|---|
-| **A. Launch args + `capture_simctl.sh`** | Any iOS app; DEBUG-only hooks jump to each screen with injected state. No UI automation. |
+| **A. Launch args + `capture_simctl.sh`** | Any iOS app; DEBUG-only hooks jump to each screen with injected state. No UI automation. `zsh $T/capture_simctl.sh --help`. |
 | **B. XCUITest / fastlane `snapshot`** | Many locales × devices; flows needing taps. |
 | **C. SwiftUI `ImageRenderer` snapshot test** | Paywalls / IAP review shots; single views; Mac. Exact, no simulator. |
 | **D. Manual** (simulator ⌘S, device, Mac `screencapture -l`) | One-offs. |
@@ -43,6 +43,7 @@ Pro 13" → 2064×2752) — never upscale. Pin the status bar (A does: 9:41, ful
 ## 4. Validate and fix
 
 ```sh
+python3 $T/images.py --help                      # check / flatten / fit
 python3 $T/images.py check <folder>              # size, alpha, which family; non-zero on problems
 python3 $T/images.py flatten <folder>            # RGBA -> RGB in place
 python3 $T/images.py fit --family ipad13 <src> <dst>   # stopgap pad-to-canvas

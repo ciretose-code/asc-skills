@@ -30,6 +30,7 @@ app's own audio or silence.
 ## 3. Encode
 
 ```sh
+zsh $T/make_preview.sh --help
 zsh $T/make_preview.sh take.mov out.mp4 <start-s> <duration-s>
 CANVAS=1200x1600 PAD_COLOR=0xE8E6DC zsh $T/make_preview.sh ...   # iPad, app bg padding
 ```
