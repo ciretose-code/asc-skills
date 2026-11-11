@@ -56,7 +56,9 @@ first and are safe to re-run. Run them from anywhere inside a project.
 
 ## Verification status
 
-Read paths of every script were exercised against a live app on 2026-11-10.
+Read paths of every script were exercised against six live apps (iOS, Mac,
+iOS+Mac, iPhone+iPad+Watch, Game Center) on 2026-11-10, matching the
+per-project scripts they replaced.
 Write paths of `listing.py` (PATCH), `app_screenshots.py`, the IAP/subscription
 scripts and the achievements sync are proven by the per-project scripts they
 came from. **Not yet exercised live:** `version.py` (all writes), `listing.py`

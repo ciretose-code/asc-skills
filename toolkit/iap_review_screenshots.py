@@ -173,16 +173,22 @@ def main() -> None:
     if not files:
         sys.exit(f"no screenshots in {SHOTS_DIR}")
 
+    api = ASC()
+    app_id = api.app_id(args.bundle_id)
+    products = {p["attributes"]["productId"]: p["id"]
+                for p in api.paged(f"/v1/apps/{app_id}/inAppPurchasesV2")}
+    subscriptions = {s["attributes"].get("productId")
+                     for g in api.paged(f"/v1/apps/{app_id}/subscriptionGroups")
+                     for s in api.paged(f"/v1/subscriptionGroups/{g['id']}/subscriptions")}
+    # Subscription review shots share this folder; they are
+    # subscription_review_screenshots.py's job, so leave them out here.
+    files = [f for f in files if product_id_for(f) not in subscriptions]
+
     problems = [(f, why) for f in files if (why := check_image(f))]
     for path, why in problems:
         print(f"  INVALID {path.name} {why}")
     if problems:
         sys.exit(f"\n{len(problems)} file(s) would be rejected — fix before uploading")
-
-    api = ASC()
-    app_id = api.app_id(args.bundle_id)
-    products = {p["attributes"]["productId"]: p["id"]
-                for p in api.paged(f"/v1/apps/{app_id}/inAppPurchasesV2")}
 
     plan = []
     for path in files:

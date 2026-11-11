@@ -1,6 +1,6 @@
 {
   "name": "asc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "App Store Connect publishing skills: screenshots, listing copy (What's New, description, keywords), releases, in-app purchases, App Previews and Game Center — backed by one dry-run-by-default API toolkit.",
   "author": { "name": "ciretose" },
   "license": "MIT",

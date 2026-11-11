@@ -15,9 +15,10 @@ marketing/game-center/achievements.json) and `paths.achievementIcons`
 (default marketing/game-center/icons, `<id>.png`). Failed icon uploads are
 logged beside achievements.json in image_upload_failures.json (gitignore it).
 
-Each entry: {"id", "referenceName", "title", "points", "showBeforeEarned",
-"repeatable", "preEarnedDescription", "earnedDescription",
-optional "localizations": {"ja": {"title", "preEarnedDescription", "earnedDescription"}}}.
+Each entry: {"id", "referenceName", "title", "description", "points", "hidden",
+optional "sortOrder", "icon", "localizations": {"ja": {"title", "description"}}}.
+`hidden` maps to showBeforeEarned=false; one description serves both the
+before- and after-earned text. Extra locales come from each `localizations` map.
 Credentials and bundle id are the toolkit's usual ones (asc_client.py).
 """
 
