@@ -25,12 +25,22 @@ scripts live in this plugin, at `<this skill's base directory>/../../toolkit`
 
 ## Steps
 
-1. **Credentials, once per machine.** Check `~/.config/asc/.env`. If absent, copy
-   `$T/.env.example` there and have the user fill it in. One key with the **App
-   Manager** role serves every app on the team — reuse it, never mint a key per
-   app. The `.p8` downloads once; keep it in `~/.config/asc/` too (folder `700`,
-   key `600`) — never inside a repo or `~/Code`. A project `.env` or legacy
-   `Scripts/asc/.env` overrides this file, so delete stale ones.
+1. **Credentials, once per machine.** Check `~/.config/asc/.env`. If it already
+   has a working key, skip to step 2 — one key with the **App Manager** role
+   serves every app on the team; never mint a key per app.
+   If absent, create the key with the user (Account Holder or Admin can do this):
+   1. Open [App Store Connect → Users and Access → Integrations →
+      App Store Connect API](https://appstoreconnect.apple.com/access/integrations/api).
+   2. Under **Team Keys**, click **Generate API Key** (or **+**). Name it
+      something like `asc-toolkit`, set Access to **App Manager**, Generate.
+   3. Copy the **Issuer ID** (top of the page) and the key's **Key ID**.
+      Download the `.p8` — Apple only offers it once.
+   4. `mkdir -m 700 ~/.config/asc`, move the `.p8` there, `chmod 600` it.
+      Never put the `.p8` inside a repo or `~/Code`.
+   5. Copy `$T/.env.example` to `~/.config/asc/.env` and set `ASC_ISSUER_ID`,
+      `ASC_KEY_ID`, and `ASC_KEY_PATH` (path to the `.p8`, or paste the PEM
+      inline). A project `.env` or legacy `Scripts/asc/.env` overrides this
+      file, so delete stale ones.
 2. **Deps:** `python3 -m pip install -r $T/requirements.txt`.
 3. **Project config:** copy `$T/asc.example.json` to the repo root as `asc.json`.
    Fill `bundleId`, `platforms` (`IOS`, `MAC_OS`, `TV_OS`, `VISION_OS`),
@@ -38,6 +48,9 @@ scripts live in this plugin, at `<this skill's base directory>/../../toolkit`
    `locales` (first = primary), `storekit`, `xcodeproj`. Delete unused keys.
    Read the real values from the Xcode project; don't guess the bundle id.
    Watch apps / extensions with their own App ID go in `extraBundleIds`.
+   Keep or edit `paths` from the example, or delete the whole `paths` object to
+   use the toolkit defaults (`marketing/listing`, `marketing/screenshots/upload`,
+   etc. — see `asc.example.json`).
 4. **gitignore:** `.env`, `.env.*`, `!.env.example`, `*.p8`,
    `image_upload_failures.json`. `asc.json` is committed — it holds no secrets.
 5. **Seed the copy from the live store** (existing apps): `python3 $T/listing.py --pull`.
